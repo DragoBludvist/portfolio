@@ -1,163 +1,80 @@
-import { useEffect, useState } from 'react';
-import { triageSamples } from '../data/profile.js';
+import { useEffect, useRef, useState } from 'react';
+import { demoAlerts } from '../data/profile.js';
 import { usePrefersReducedMotion } from '../hooks.js';
-import Section from './Section.jsx';
 
-const STAGES = ['Classify', 'Judge', 'Explain'];
-const VERDICTS = {
-  escalate: { label: 'Escalate', tone: 'alert' },
-  benign: { label: 'Benign', tone: 'ok' },
-  review: { label: 'Analyst review', tone: 'warn' },
+const VERDICT = {
+  escalate: { label: 'Escalate', tone: 'offense' },
+  benign: { label: 'Benign', tone: 'defense' },
+  review: { label: 'Analyst review', tone: 'ai' },
 };
-const STEP_MS = 380;
+const STEPS = ['Classifying…', 'Judging…'];
 
-// A hands-on, simulated version of the triage pipeline built at Navitas:
-// classifier → LLM judge → explanation, run over sample alerts.
+// Optional, simulated mini-run of the triage idea: each sample alert is
+// classified, double-checked by the judge, then given a verdict.
 export default function TriageDemo() {
   const reduced = usePrefersReducedMotion();
-  const [step, setStep] = useState(-1); // global step: alertIndex * 3 + stageIndex
+  // status per alert: 'queued' | 0 | 1 (index into STEPS) | 'done'
+  const [status, setStatus] = useState(() => demoAlerts.map(() => 'queued'));
   const [running, setRunning] = useState(false);
-  const [selected, setSelected] = useState(triageSamples[0].id);
-  const total = triageSamples.length * STAGES.length;
+  const timers = useRef([]);
 
-  useEffect(() => {
-    if (!running) return;
-    if (step >= total - 1) {
-      setRunning(false);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  const finished = status.every((s) => s === 'done');
+
+  const run = () => {
+    if (running) return;
+    if (finished) {
+      setStatus(demoAlerts.map(() => 'queued'));
       return;
     }
-    const t = setTimeout(() => setStep((s) => s + 1), reduced ? 0 : STEP_MS);
-    return () => clearTimeout(t);
-  }, [running, step, total, reduced]);
-
-  // Follow the alert being processed while the run is going.
-  useEffect(() => {
-    if (running && step >= 0) setSelected(triageSamples[Math.floor(step / STAGES.length)].id);
-  }, [running, step]);
-
-  const stagesDone = (i) => Math.max(0, Math.min(STAGES.length, step - i * STAGES.length + 1));
-  const start = () => {
-    setStep(-1);
     setRunning(true);
+    const tick = reduced ? 0 : 480;
+    let t = 0;
+    demoAlerts.forEach((_, i) => {
+      [0, 1, 'done'].forEach((s) => {
+        timers.current.push(setTimeout(() => setStatus((prev) => prev.map((v, j) => (j === i ? s : v))), (t += tick)));
+      });
+    });
+    timers.current.push(setTimeout(() => setRunning(false), t));
   };
-  const reset = () => {
-    setRunning(false);
-    setStep(-1);
-    setSelected(triageSamples[0].id);
-  };
-
-  const finished = step >= total - 1;
-  const index = triageSamples.findIndex((a) => a.id === selected);
-  const alert = triageSamples[index];
-  const done = stagesDone(index);
-  const verdict = VERDICTS[alert.verdict];
 
   return (
-    <Section id="demo" index="02" title="Try the triage pipeline" kicker="interactive · simulated">
-      <p className="section-lead">
-        This is a simplified, simulated version of the alert-triage system I built. Run it over sample alerts and watch each one go through the
-        classifier, the LLM judge and the analyst explanation.
-      </p>
-
-      <div className="triage">
-        <div className="triage-queue">
-          <div className="triage-toolbar">
-            <p className="mono-label">
-              queue · <span>{triageSamples.length} sample alerts</span>
-            </p>
-            <div className="triage-actions">
-              {finished || running ? (
-                <button type="button" className="btn btn--sm" onClick={reset} disabled={running}>
-                  Reset
-                </button>
-              ) : null}
-              <button type="button" className="btn btn--sm btn--primary" onClick={start} disabled={running}>
-                {running ? 'Triaging…' : finished ? 'Run again' : 'Run triage'}
-              </button>
-            </div>
-          </div>
-
-          <ul className="triage-list">
-            {triageSamples.map((a, i) => {
-              const d = stagesDone(i);
-              const v = VERDICTS[a.verdict];
-              const state = d === 0 ? 'queued' : d < STAGES.length ? 'working' : 'done';
-              return (
-                <li key={a.id}>
-                  <button
-                    type="button"
-                    className={`triage-row is-${state} ${selected === a.id ? 'is-selected' : ''}`}
-                    onClick={() => setSelected(a.id)}
-                    aria-pressed={selected === a.id}
-                  >
-                    <span className="triage-rule">{a.rule}</span>
-                    <span className="triage-meta">
-                      {a.host} · {a.technique}
-                    </span>
-                    <span className="triage-status">
-                      {state === 'done' ? (
-                        <span className={`pill pill--${v.tone}`}>{v.label}</span>
-                      ) : (
-                        <span className="pill pill--muted">{state === 'working' ? STAGES[d] + '…' : 'Queued'}</span>
-                      )}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+    <section id="demo" className="section" aria-labelledby="demo-title">
+      <div className="wrap demo">
+        <div className="reveal">
+          <p className="kicker">Optional · simulated</p>
+          <h2 id="demo-title" className="h2 demo-title">
+            See the triage idea in ten seconds
+          </h2>
+          <p className="demo-lead">
+            Sample alerts, made up for this demo. Each one gets a verdict from the classifier and the judge, and disagreements go to a human.
+          </p>
+          <button type="button" className="btn btn--solid" onClick={run} disabled={running}>
+            {running ? 'Triaging…' : finished ? 'Reset' : 'Run triage'}
+          </button>
         </div>
-
-        <article className="triage-detail" aria-label="Selected alert">
-          <header>
-            <p className="mono-label">
-              {alert.tactic} · {alert.technique}
-            </p>
-            <h3>{alert.rule}</h3>
-            <p className="muted small">host {alert.host}</p>
-          </header>
-
-          <ol className="pipeline">
-            {STAGES.map((s, i) => (
-              <li key={s} className={i < done ? 'is-done' : i === done && running ? 'is-active' : ''}>
-                <span className="pipeline-dot" aria-hidden="true" />
-                {s}
+        <ul className="alerts reveal">
+          {demoAlerts.map((a, i) => {
+            const s = status[i];
+            const v = VERDICT[a.verdict];
+            return (
+              <li key={a.id} className={typeof s === 'number' ? 'is-working' : ''}>
+                <span>
+                  {a.rule}
+                  <small>
+                    {a.technique} · {a.tactic}
+                  </small>
+                </span>
+                <span className={`verdict ${s === 'done' ? `tone-${v.tone}` : ''}`}>{s === 'done' ? v.label : typeof s === 'number' ? STEPS[s] : 'Queued'}</span>
               </li>
-            ))}
-          </ol>
-
-          {done === 0 ? (
-            <p className="triage-placeholder">Press “Run triage” to process the queue, or pick any alert after the run.</p>
-          ) : (
-            <div className="triage-findings">
-              <div className="finding">
-                <p className="mono-label">SecureBERT classifier</p>
-                <div className="lean" role="img" aria-label={alert.lean > 0.5 ? 'Leans threat' : 'Leans benign'}>
-                  <span className="lean-bar" data-lean={alert.lean > 0.5 ? 'threat' : 'benign'} ref={(el) => el?.style.setProperty('--lean', String(alert.lean))} />
-                </div>
-                <p className="small">{alert.lean > 0.5 ? 'Leans threat' : 'Leans benign'}</p>
-              </div>
-              {done >= 2 && (
-                <div className="finding">
-                  <p className="mono-label">Foundation-Sec judge</p>
-                  <p className="small">{alert.judge === 'agrees' ? 'Agrees with the classifier' : 'Disagrees with the classifier'}</p>
-                </div>
-              )}
-              {done >= 3 && (
-                <>
-                  <div className="finding finding--wide">
-                    <p className="mono-label">Explanation for the analyst</p>
-                    <p>{alert.explanation}</p>
-                  </div>
-                  <p className="triage-verdict" role="status">
-                    Verdict <span className={`pill pill--${verdict.tone}`}>{verdict.label}</span>
-                  </p>
-                </>
-              )}
-            </div>
-          )}
-        </article>
+            );
+          })}
+        </ul>
+        <p className="sr-only" role="status">
+          {finished ? 'Triage complete.' : ''}
+        </p>
       </div>
-    </Section>
+    </section>
   );
 }

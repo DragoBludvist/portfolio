@@ -1,64 +1,89 @@
-import { focusAreas, profile } from '../data/profile.js';
-import { modKey, useMediaQuery } from '../hooks.js';
-import { ArrowIcon, PinIcon, TerminalIcon } from './Icons.jsx';
+import { useEffect, useRef } from 'react';
+import { glance, profile } from '../data/profile.js';
 import SafeLink from './SafeLink.jsx';
-import ScrambleText from './ScrambleText.jsx';
-import SignalField from './SignalField.jsx';
 
-export default function Hero({ onOpenPalette }) {
-  const canHover = useMediaQuery('(hover: hover)');
+const MOTTO_TONES = ['offense', 'ai', 'defense'];
+
+// Calm first impression: one name, one line, and the facts a recruiter checks
+// first in the "at a glance" card. The only motion is the name settling in,
+// the glance rows sliding in once, and a faint halftone that follows the cursor.
+export default function Hero({ onHighlight }) {
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || !window.matchMedia('(hover: hover)').matches) return;
+    const onMove = (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      hero.style.setProperty('--my', `${e.clientY - r.top}px`);
+    };
+    hero.addEventListener('pointermove', onMove);
+    return () => hero.removeEventListener('pointermove', onMove);
+  }, []);
 
   return (
-    <section id="top" className="hero">
-      <SignalField />
-      <div className="hero-inner">
-        <p className="status-line">
-          <abbr className="tlp" title="Traffic Light Protocol: public, no restrictions on sharing">
-            TLP:CLEAR
-          </abbr>
-          <span className="status-dot" aria-hidden="true" />
-          <span>{profile.availability}</span>
-        </p>
-
-        <h1 className="hero-name">{profile.name}</h1>
-        <p className="hero-role">
-          <ScrambleText text={`> ${profile.role}`} />
-          <span className="cursor" aria-hidden="true" />
-        </p>
-        <p className="hero-summary">{profile.summary}</p>
-
-        <div className="hero-actions">
-          <a className="btn btn--primary" href="#demo">
-            Try the triage demo
-          </a>
-          <SafeLink className="btn" href={profile.links.resume} newTab>
-            Resume <ArrowIcon />
-          </SafeLink>
-          <button type="button" className="btn btn--ghost" onClick={onOpenPalette}>
-            <TerminalIcon /> Console
-            {canHover && <kbd>{modKey()} K</kbd>}
-          </button>
+    <section id="top" className="hero" ref={heroRef}>
+      <div className="halftone" aria-hidden="true" />
+      <div className="wrap hero-grid">
+        <div>
+          <p className="eyebrow">
+            <span className="status-dot" aria-hidden="true" />
+            {profile.status.join(' · ')}
+          </p>
+          <h1 className="hero-name">
+            {profile.displayName}
+            <span className="sr-only"> Subramanyam</span>
+          </h1>
+          <p className="hero-role reveal">{profile.roleLine}</p>
+          <p className="motto reveal">
+            {profile.motto.map((word, i) => (
+              <button
+                key={word}
+                type="button"
+                className={`motto-${MOTTO_TONES[i]}`}
+                onMouseEnter={() => onHighlight(MOTTO_TONES[i], false)}
+                onMouseLeave={() => onHighlight(null, false)}
+                onFocus={() => onHighlight(MOTTO_TONES[i], false)}
+                onBlur={() => onHighlight(null, false)}
+                onClick={() => onHighlight(MOTTO_TONES[i], true)}
+              >
+                {word}
+              </button>
+            ))}
+          </p>
+          <p className="hero-lead reveal">{profile.lead}</p>
+          <div className="actions reveal">
+            <SafeLink className="btn btn--solid" href={profile.links.resume} newTab>
+              Download resume
+            </SafeLink>
+            <a className="btn" href="#contact">
+              Get in touch
+            </a>
+          </div>
         </div>
 
-        <p className="hero-meta">
-          <span>
-            <PinIcon /> {profile.location}
-          </span>
-          <span className="hero-hint">{canHover ? 'Move your cursor over the field: noise fades, signal links up.' : 'Tap the field: noise fades, signal links up.'}</span>
-        </p>
+        <aside className="glance" aria-label="At a glance">
+          <div className="glance-head">
+            <img src={profile.photo.src} alt="" width="56" height="56" decoding="async" />
+            <p>
+              <b>{profile.displayName}</b>
+              Security engineer · {profile.location}
+            </p>
+          </div>
+          <dl>
+            {glance.map((row) => (
+              <div className="glance-row" key={row.label}>
+                <dt>{row.label}</dt>
+                <dd>
+                  {row.value}
+                  {row.note && <span> · {row.note}</span>}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
       </div>
-
-      <ul className="focus-areas" aria-label="What I work on">
-        {focusAreas.map((f, i) => (
-          <li key={f.title}>
-            <span className="focus-index" aria-hidden="true">
-              0{i + 1}
-            </span>
-            <strong>{f.title}</strong>
-            <span>{f.text}</span>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }

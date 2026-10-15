@@ -4,29 +4,23 @@ import { ArrowIcon } from './Icons.jsx';
 import SafeLink from './SafeLink.jsx';
 import Section from './Section.jsx';
 
-// Bento grid: the featured project takes the large tile. On devices with a
-// mouse, a soft glow follows the cursor across the cards.
+const SIDE_LABEL = { offense: 'Offense', defense: 'Defense', ai: 'AI security' };
+
+// Each project's colour comes from its `side` in profile.js, so adding a new
+// red-team project is just a new entry in the data file.
 export default function Projects() {
   const gridRef = useSpotlight('.project');
-
   return (
-    <Section id="projects" index="04" title="Projects">
+    <Section id="projects" kicker="Projects" title="Selected work">
       <div className="projects" ref={gridRef}>
-        {projects.map((p, i) => (
-          <article key={p.name} className={`card project ${i === 0 ? 'project--featured' : ''}`}>
-            <p className="project-kind">{p.kind}</p>
+        {projects.map((p) => (
+          <article key={p.name} className={`project tone-${p.side} reveal`}>
+            <p className="project-kind">
+              <span>{SIDE_LABEL[p.side] ?? p.side}</span> · {p.kind}
+            </p>
             <h3>{p.name}</h3>
-            <p className="project-desc">{p.description}</p>
-            <ul className="highlights">
-              {p.highlights.map((h) => (
-                <li key={h}>{h}</li>
-              ))}
-            </ul>
-            <ul className="tags" aria-label="Stack">
-              {p.tags.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
+            <p className="project-summary">{p.summary}</p>
+            <p className="project-tools">{p.tools.join(' · ')}</p>
             {p.links.length > 0 && (
               <div className="project-links">
                 {p.links.map((l) => (

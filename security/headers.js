@@ -3,11 +3,17 @@
 // to serve the same headers from `npm run preview`, and to fail the build
 // if vercel.json has drifted from it.
 
+import { goatcounterOrigin } from '../site.config.js';
+
+// Visit counting sends a single image request to GoatCounter, so its origin is
+// added to img-src only when a site code is configured in site.config.js.
+const analyticsOrigin = goatcounterOrigin();
+
 export const csp = {
   'default-src': ["'none'"],
   'script-src': ["'self'"],
   'style-src': ["'self'"],
-  'img-src': ["'self'"],
+  'img-src': ["'self'", ...(analyticsOrigin ? [analyticsOrigin] : [])],
   'font-src': ["'self'"],
   // The site never fetches data and has no web manifest.
   'connect-src': ["'none'"],

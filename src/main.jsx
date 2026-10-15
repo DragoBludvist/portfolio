@@ -11,6 +11,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import './styles.css';
 import App from './App.jsx';
 import { auditLinks } from './lib/safeUrl.js';
+import { countVisit } from './lib/analytics.js';
 import { profile, projects } from './data/profile.js';
 
 auditLinks([
@@ -18,6 +19,9 @@ auditLinks([
   ...Object.values(profile.links),
   ...projects.flatMap((p) => p.links.map((l) => l.href)),
 ]);
+
+// Privacy-friendly visit count; does nothing until a GoatCounter code is set in site.config.js.
+countVisit();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

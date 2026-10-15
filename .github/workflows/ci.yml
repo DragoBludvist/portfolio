@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      # --ignore-scripts: dependencies can't run install hooks in CI (supply-chain hardening).
+      # Nothing in this project needs them; Vite's native binaries ship as plain packages.
+      - run: npm ci --ignore-scripts
       - run: npm audit --audit-level=moderate
       - run: npm run build
