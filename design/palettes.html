@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Color scheme options</title>
+<script type="module" src="./palettes.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 24px 64px;
+    background: #0a0a0b; color: #e8e8e8;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .page-head { max-width: 1240px; margin: 0 auto 28px; }
+  .page-head h1 { font-family: 'Space Grotesk Variable', system-ui, sans-serif; font-weight: 600; font-size: 2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .page-head p { margin: 0; color: #a0a0a0; max-width: 70ch; }
+  .grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } body { padding: 20px 14px 48px; } }
+
+  .option { border: 1px solid #262626; border-radius: 18px; background: #111; overflow: hidden; }
+  .option-head { padding: 18px 20px 14px; }
+  .option-head h2 { margin: 0; font-family: 'Space Grotesk Variable', system-ui, sans-serif; font-size: 1.35rem; font-weight: 600; letter-spacing: -0.01em; }
+  .option-head h2 span { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #888; font-weight: 400; margin-right: 8px; }
+  .option-head p { margin: 6px 0 0; color: #a3a3a3; font-size: 0.92rem; }
+  .swatches { display: flex; gap: 6px; padding: 0 20px 16px; flex-wrap: wrap; }
+  .sw { display: grid; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: #9a9a9a; }
+  .sw i { display: block; width: 46px; height: 30px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); }
+
+  /* ---- mockup, driven entirely by the scheme variables ---- */
+  .mock {
+    background-color: var(--bg);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--text); padding: 0 18px 18px; border-top: 1px solid #262626;
+  }
+  .m-nav { display: flex; align-items: center; justify-content: space-between; height: 46px; border-bottom: 1px solid var(--border); margin: 0 -18px 18px; padding: 0 18px; }
+  .m-brand { display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk Variable', sans-serif; font-weight: 600; font-size: 0.85rem; }
+  .m-mark { width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--accent); background: var(--accent-soft); }
+  .m-links { display: flex; gap: 12px; font-size: 0.72rem; color: var(--muted); }
+  .m-links b { color: var(--text); font-weight: 500; }
+  .m-status { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); font-size: 0.68rem; color: var(--text-2); }
+  .m-tlp { padding: 1px 7px; border-radius: 99px; background: var(--text); color: var(--bg); font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; }
+  .m-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .m-name { font-family: 'Space Grotesk Variable', sans-serif; font-weight: 600; font-size: 1.9rem; letter-spacing: -0.04em; line-height: 1.02; margin: 14px 0 8px; }
+  .m-role { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; color: var(--accent); }
+  .m-role::after { content: ''; display: inline-block; width: 7px; height: 0.95em; background: var(--accent); vertical-align: -2px; margin-left: 3px; }
+  .m-sum { color: var(--text-2); font-size: 0.82rem; margin: 10px 0 14px; max-width: 46ch; }
+  .m-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .m-btn { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 0.74rem; }
+  .m-btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .m-panel { margin-top: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; }
+  .m-panel-head { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .m-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 12px; font-size: 0.76rem; }
+  .m-row + .m-row { border-top: 1px solid var(--border); }
+  .m-row.sel { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
+  .m-row small { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--muted); }
+  .pill { padding: 1px 8px; border-radius: 99px; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; white-space: nowrap; border: 1px solid transparent; }
+  .p-esc { color: var(--danger); background: color-mix(in srgb, var(--danger) 13%, transparent); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+  .p-ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 13%, transparent); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+  .p-rev { color: var(--warn); background: color-mix(in srgb, var(--warn) 13%, transparent); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+  .m-bar { height: 6px; margin: 2px 12px 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+  .m-bar i { display: block; width: 82%; height: 100%; background: linear-gradient(90deg, var(--warn), var(--danger)); }
+  .m-tiles { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+  .m-tile { padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); border-left: 3px solid var(--border-strong); font-size: 0.66rem; color: var(--text-2); background: var(--surface); }
+  .m-tile.hit { border-left-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+  .m-tile.dim { opacity: 0.35; }
+  .mode-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: #8a8a8a; padding: 10px 20px 8px; background: #111; text-transform: uppercase; letter-spacing: 0.06em; border-top: 1px solid #262626; }
+
+  /* ---- the four schemes ---- */
+  [data-s='blue'][data-m='dark'] { --bg:#070b14; --surface:#0d1422; --surface-2:#131c2f; --border:#1c2840; --border-strong:#2b3a58; --text:#e6edf8; --text-2:#a9b6cb; --muted:#6c7b95; --accent:#4c8dff; --accent-ink:#ffffff; --accent-soft:rgba(76,141,255,0.14); --ok:#2dd4bf; --warn:#fb923c; --danger:#ff5c7a; --grid:rgba(120,160,255,0.045); }
+  [data-s='blue'][data-m='light'] { --bg:#f4f7fc; --surface:#ffffff; --surface-2:#eaf0f9; --border:#d9e1ee; --border-strong:#c3cee0; --text:#0b1324; --text-2:#3a4660; --muted:#67758f; --accent:#1f5fe0; --accent-ink:#ffffff; --accent-soft:rgba(31,95,224,0.1); --ok:#0f8f84; --warn:#c2560c; --danger:#d0304f; --grid:rgba(31,95,224,0.05); }
+
+  [data-s='red'][data-m='dark'] { --bg:#0b0b0d; --surface:#141417; --surface-2:#1b1b20; --border:#26262c; --border-strong:#36363e; --text:#f3f1ee; --text-2:#bcb7b1; --muted:#7f7a74; --accent:#ff3b4e; --accent-ink:#ffffff; --accent-soft:rgba(255,59,78,0.13); --ok:#a3e635; --warn:#fbbf24; --danger:#ff3b4e; --grid:rgba(255,255,255,0.03); }
+  [data-s='red'][data-m='light'] { --bg:#f7f5f2; --surface:#ffffff; --surface-2:#efebe6; --border:#e1dbd3; --border-strong:#cdc5bb; --text:#161412; --text-2:#4a4540; --muted:#7a736b; --accent:#d61f33; --accent-ink:#ffffff; --accent-soft:rgba(214,31,51,0.09); --ok:#4d7c0f; --warn:#b45309; --danger:#d61f33; --grid:rgba(0,0,0,0.035); }
+
+  [data-s='amber'][data-m='dark'] { --bg:#0c0a06; --surface:#15120b; --surface-2:#1d1910; --border:#2b251a; --border-strong:#3d3524; --text:#f4ead3; --text-2:#cbbe9e; --muted:#8c8064; --accent:#ffb000; --accent-ink:#1a1200; --accent-soft:rgba(255,176,0,0.13); --ok:#86e08f; --warn:#ffb000; --danger:#ff6a3d; --grid:rgba(255,176,0,0.04); }
+  [data-s='amber'][data-m='light'] { --bg:#f8f3e7; --surface:#fffaf0; --surface-2:#f1e9d6; --border:#e3d7bb; --border-strong:#d2c39f; --text:#1e1a12; --text-2:#4d4535; --muted:#7d7259; --accent:#a86c00; --accent-ink:#ffffff; --accent-soft:rgba(168,108,0,0.1); --ok:#2f7a3c; --warn:#a86c00; --danger:#c2410c; --grid:rgba(120,90,20,0.05); }
+
+  [data-s='purple'][data-m='dark'] { --bg:#09070f; --surface:#110e1b; --surface-2:#181426; --border:#241e37; --border-strong:#342c4e; --text:#ece8f6; --text-2:#b1a9c9; --muted:#787092; --accent:#a78bfa; --accent-ink:#130a26; --accent-soft:rgba(167,139,250,0.14); --ok:#5eead4; --warn:#fbbf24; --danger:#f472b6; --grid:rgba(167,139,250,0.045); }
+  [data-s='purple'][data-m='light'] { --bg:#f7f6fb; --surface:#ffffff; --surface-2:#efecf7; --border:#dfdaee; --border-strong:#cbc4e0; --text:#15112a; --text-2:#433c5e; --muted:#706a8a; --accent:#6d4fe0; --accent-ink:#ffffff; --accent-soft:rgba(109,79,224,0.09); --ok:#0f8f84; --warn:#b7791f; --danger:#c2367f; --grid:rgba(109,79,224,0.05); }
+</style>
+</head>
+<body>
+  <header class="page-head">
+    <h1>Pick a color scheme</h1>
+    <p>Each option is shown on a slice of your site (hero, triage demo, skills matrix) in dark mode, with a light-mode strip below. Nothing on the real site changes until you choose.</p>
+  </header>
+
+  <div class="grid">
+    <!-- 1. Blue Team -->
+    <section class="option">
+      <div class="option-head">
+        <h2><span>01</span>Blue Team</h2>
+        <p>The defender's console. Deep navy, electric-blue signal, cyan for benign, orange and rose for alerts. Calm, trustworthy, very SOC.</p>
+      </div>
+      <div class="swatches">
+        <div class="sw"><i style="background:#070b14"></i>#070b14</div>
+        <div class="sw"><i style="background:#0d1422"></i>#0d1422</div>
+        <div class="sw"><i style="background:#4c8dff"></i>#4c8dff</div>
+        <div class="sw"><i style="background:#2dd4bf"></i>#2dd4bf</div>
+        <div class="sw"><i style="background:#fb923c"></i>#fb923c</div>
+        <div class="sw"><i style="background:#ff5c7a"></i>#ff5c7a</div>
+      </div>
+      <div class="mock" data-s="blue" data-m="dark">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span><span>Projects</span></span></div>
+        <span class="m-status"><span class="m-tlp">TLP:CLEAR</span><i class="m-dot"></i>Open to full-time security roles</span>
+        <div class="m-name">Aakash Premnath<br>Subramanyam</div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <p class="m-sum">I build detection pipelines that analysts actually trust.</p>
+        <div class="m-btns"><span class="m-btn primary">Try the triage demo</span><span class="m-btn">Resume ↗</span><span class="m-btn">Console ⌘K</span></div>
+        <div class="m-panel">
+          <div class="m-panel-head"><span>queue · sample alerts</span><span>run triage</span></div>
+          <div class="m-row sel"><span>Encoded PowerShell command line<small>wks-fin-14 · T1059.001</small></span><span class="pill p-esc">Escalate</span></div>
+          <div class="m-bar"><i></i></div>
+          <div class="m-row"><span>Scheduled task created<small>srv-build-03 · T1053.005</small></span><span class="pill p-ok">Benign</span></div>
+          <div class="m-row"><span>Large upload to cloud storage<small>wks-rd-07 · T1567.002</small></span><span class="pill p-rev">Analyst review</span></div>
+        </div>
+        <div class="m-tiles"><span class="m-tile hit">CrowdStrike NG-SIEM</span><span class="m-tile hit">Wazuh</span><span class="m-tile dim">Burp Suite</span><span class="m-tile hit">SecureBERT 2.0</span><span class="m-tile dim">NIST CSF</span></div>
+      </div>
+      <div class="mode-label">light mode</div>
+      <div class="mock" data-s="blue" data-m="light">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span></span></div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <div class="m-btns" style="margin-top:12px"><span class="m-btn primary">Try the triage demo</span><span class="pill p-esc">Escalate</span><span class="pill p-ok">Benign</span><span class="pill p-rev">Analyst review</span></div>
+      </div>
+    </section>
+
+    <!-- 2. Red Team -->
+    <section class="option">
+      <div class="option-head">
+        <h2><span>02</span>Red Team</h2>
+        <p>The attacker's view. Graphite black, a single sharp crimson, warm off-white text. Bold and high-contrast; red does double duty as brand and "escalate".</p>
+      </div>
+      <div class="swatches">
+        <div class="sw"><i style="background:#0b0b0d"></i>#0b0b0d</div>
+        <div class="sw"><i style="background:#141417"></i>#141417</div>
+        <div class="sw"><i style="background:#ff3b4e"></i>#ff3b4e</div>
+        <div class="sw"><i style="background:#a3e635"></i>#a3e635</div>
+        <div class="sw"><i style="background:#fbbf24"></i>#fbbf24</div>
+        <div class="sw"><i style="background:#f3f1ee"></i>#f3f1ee</div>
+      </div>
+      <div class="mock" data-s="red" data-m="dark">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span><span>Projects</span></span></div>
+        <span class="m-status"><span class="m-tlp">TLP:CLEAR</span><i class="m-dot"></i>Open to full-time security roles</span>
+        <div class="m-name">Aakash Premnath<br>Subramanyam</div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <p class="m-sum">I build detection pipelines that analysts actually trust.</p>
+        <div class="m-btns"><span class="m-btn primary">Try the triage demo</span><span class="m-btn">Resume ↗</span><span class="m-btn">Console ⌘K</span></div>
+        <div class="m-panel">
+          <div class="m-panel-head"><span>queue · sample alerts</span><span>run triage</span></div>
+          <div class="m-row sel"><span>Encoded PowerShell command line<small>wks-fin-14 · T1059.001</small></span><span class="pill p-esc">Escalate</span></div>
+          <div class="m-bar"><i></i></div>
+          <div class="m-row"><span>Scheduled task created<small>srv-build-03 · T1053.005</small></span><span class="pill p-ok">Benign</span></div>
+          <div class="m-row"><span>Large upload to cloud storage<small>wks-rd-07 · T1567.002</small></span><span class="pill p-rev">Analyst review</span></div>
+        </div>
+        <div class="m-tiles"><span class="m-tile hit">CrowdStrike NG-SIEM</span><span class="m-tile hit">Wazuh</span><span class="m-tile dim">Burp Suite</span><span class="m-tile hit">SecureBERT 2.0</span><span class="m-tile dim">NIST CSF</span></div>
+      </div>
+      <div class="mode-label">light mode</div>
+      <div class="mock" data-s="red" data-m="light">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span></span></div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <div class="m-btns" style="margin-top:12px"><span class="m-btn primary">Try the triage demo</span><span class="pill p-esc">Escalate</span><span class="pill p-ok">Benign</span><span class="pill p-rev">Analyst review</span></div>
+      </div>
+    </section>
+
+    <!-- 3. Phosphor -->
+    <section class="option">
+      <div class="option-head">
+        <h2><span>03</span>Phosphor</h2>
+        <p>A vintage amber-CRT terminal, warmed up. Near-black brown, amber signal, phosphor green for benign, parchment light mode. Distinctive and memorable.</p>
+      </div>
+      <div class="swatches">
+        <div class="sw"><i style="background:#0c0a06"></i>#0c0a06</div>
+        <div class="sw"><i style="background:#15120b"></i>#15120b</div>
+        <div class="sw"><i style="background:#ffb000"></i>#ffb000</div>
+        <div class="sw"><i style="background:#86e08f"></i>#86e08f</div>
+        <div class="sw"><i style="background:#ff6a3d"></i>#ff6a3d</div>
+        <div class="sw"><i style="background:#f4ead3"></i>#f4ead3</div>
+      </div>
+      <div class="mock" data-s="amber" data-m="dark">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span><span>Projects</span></span></div>
+        <span class="m-status"><span class="m-tlp">TLP:CLEAR</span><i class="m-dot"></i>Open to full-time security roles</span>
+        <div class="m-name">Aakash Premnath<br>Subramanyam</div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <p class="m-sum">I build detection pipelines that analysts actually trust.</p>
+        <div class="m-btns"><span class="m-btn primary">Try the triage demo</span><span class="m-btn">Resume ↗</span><span class="m-btn">Console ⌘K</span></div>
+        <div class="m-panel">
+          <div class="m-panel-head"><span>queue · sample alerts</span><span>run triage</span></div>
+          <div class="m-row sel"><span>Encoded PowerShell command line<small>wks-fin-14 · T1059.001</small></span><span class="pill p-esc">Escalate</span></div>
+          <div class="m-bar"><i></i></div>
+          <div class="m-row"><span>Scheduled task created<small>srv-build-03 · T1053.005</small></span><span class="pill p-ok">Benign</span></div>
+          <div class="m-row"><span>Large upload to cloud storage<small>wks-rd-07 · T1567.002</small></span><span class="pill p-rev">Analyst review</span></div>
+        </div>
+        <div class="m-tiles"><span class="m-tile hit">CrowdStrike NG-SIEM</span><span class="m-tile hit">Wazuh</span><span class="m-tile dim">Burp Suite</span><span class="m-tile hit">SecureBERT 2.0</span><span class="m-tile dim">NIST CSF</span></div>
+      </div>
+      <div class="mode-label">light mode</div>
+      <div class="mock" data-s="amber" data-m="light">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span></span></div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <div class="m-btns" style="margin-top:12px"><span class="m-btn primary">Try the triage demo</span><span class="pill p-esc">Escalate</span><span class="pill p-ok">Benign</span><span class="pill p-rev">Analyst review</span></div>
+      </div>
+    </section>
+
+    <!-- 4. Purple Team -->
+    <section class="option">
+      <div class="option-head">
+        <h2><span>04</span>Purple Team</h2>
+        <p>Where red and blue meet: offense informing defense. Ink-violet base, lavender signal, teal for benign, pink for escalations. Modern and a little unexpected.</p>
+      </div>
+      <div class="swatches">
+        <div class="sw"><i style="background:#09070f"></i>#09070f</div>
+        <div class="sw"><i style="background:#110e1b"></i>#110e1b</div>
+        <div class="sw"><i style="background:#a78bfa"></i>#a78bfa</div>
+        <div class="sw"><i style="background:#5eead4"></i>#5eead4</div>
+        <div class="sw"><i style="background:#fbbf24"></i>#fbbf24</div>
+        <div class="sw"><i style="background:#f472b6"></i>#f472b6</div>
+      </div>
+      <div class="mock" data-s="purple" data-m="dark">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span><span>Projects</span></span></div>
+        <span class="m-status"><span class="m-tlp">TLP:CLEAR</span><i class="m-dot"></i>Open to full-time security roles</span>
+        <div class="m-name">Aakash Premnath<br>Subramanyam</div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <p class="m-sum">I build detection pipelines that analysts actually trust.</p>
+        <div class="m-btns"><span class="m-btn primary">Try the triage demo</span><span class="m-btn">Resume ↗</span><span class="m-btn">Console ⌘K</span></div>
+        <div class="m-panel">
+          <div class="m-panel-head"><span>queue · sample alerts</span><span>run triage</span></div>
+          <div class="m-row sel"><span>Encoded PowerShell command line<small>wks-fin-14 · T1059.001</small></span><span class="pill p-esc">Escalate</span></div>
+          <div class="m-bar"><i></i></div>
+          <div class="m-row"><span>Scheduled task created<small>srv-build-03 · T1053.005</small></span><span class="pill p-ok">Benign</span></div>
+          <div class="m-row"><span>Large upload to cloud storage<small>wks-rd-07 · T1567.002</small></span><span class="pill p-rev">Analyst review</span></div>
+        </div>
+        <div class="m-tiles"><span class="m-tile hit">CrowdStrike NG-SIEM</span><span class="m-tile hit">Wazuh</span><span class="m-tile dim">Burp Suite</span><span class="m-tile hit">SecureBERT 2.0</span><span class="m-tile dim">NIST CSF</span></div>
+      </div>
+      <div class="mode-label">light mode</div>
+      <div class="mock" data-s="purple" data-m="light">
+        <div class="m-nav"><span class="m-brand"><i class="m-mark"></i>Aakash Premnath</span><span class="m-links"><b>Demo</b><span>Experience</span></span></div>
+        <div class="m-role">&gt; Cybersecurity Engineer</div>
+        <div class="m-btns" style="margin-top:12px"><span class="m-btn primary">Try the triage demo</span><span class="pill p-esc">Escalate</span><span class="pill p-ok">Benign</span><span class="pill p-rev">Analyst review</span></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

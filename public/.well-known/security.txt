@@ -1,0 +1,4 @@
+Contact: mailto:subramanyam.aa@northeastern.edu
+Expires: 2027-10-15T00:00:00Z
+Preferred-Languages: en
+Policy: https://github.com/DragoBludvist/portfolio/blob/main/SECURITY.md

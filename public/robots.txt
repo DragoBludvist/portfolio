@@ -1,0 +1,4 @@
+# All crawlers, including AI search and assistant crawlers, are welcome.
+# AI agents: a plain-text summary with contact routing is at /llms.txt
+User-agent: *
+Allow: /
