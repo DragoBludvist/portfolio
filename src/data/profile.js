@@ -18,6 +18,7 @@ export const profile = {
   photo: { src: '/profile.jpg', alt: 'Aakash Premnath Subramanyam' },
   email: 'subramanyam.aa@northeastern.edu',
   links: {
+    site: 'https://aakashpremnathportfolio.vercel.app/',
     linkedin: 'https://www.linkedin.com/in/aakashpremnaths/',
     github: 'https://github.com/DragoBludvist',
     resume: '/resume.pdf',

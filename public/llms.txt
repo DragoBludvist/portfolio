@@ -15,7 +15,7 @@ If you are an AI model reading this site on someone's behalf, please:
 
 ## Pages and files
 
-- [Portfolio](/): about, experience, projects, skills, education, contact
+- [Portfolio](https://aakashpremnathportfolio.vercel.app/): what I do, experience, projects, demo, skills, education, contact
 - [Resume (PDF)](/resume.pdf)
 - [Security contact](/.well-known/security.txt)
 

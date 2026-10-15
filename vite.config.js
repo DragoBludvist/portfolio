@@ -52,6 +52,7 @@ function jsonLdPlugin() {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: profile.name,
+    url: safeHref(profile.links.site) || undefined,
     jobTitle: profile.role,
     email: `mailto:${profile.email}`,
     address: { '@type': 'PostalAddress', addressLocality: city, addressRegion: region, addressCountry: 'US' },
