@@ -11,7 +11,7 @@ const SIDE_LABEL = { offense: 'Offense', defense: 'Defense', ai: 'AI security' }
 export default function Projects() {
   const gridRef = useSpotlight('.project');
   return (
-    <Section id="projects" kicker="Projects" title="Selected work">
+    <Section id="projects" title="Projects">
       <div className="projects" ref={gridRef}>
         {projects.map((p) => (
           <article key={p.name} className={`project tone-${p.side} reveal`}>

@@ -3,7 +3,7 @@ import Section from './Section.jsx';
 
 export default function Education() {
   return (
-    <Section id="education" kicker="Education" title="Training & certifications">
+    <Section id="education" title="Education">
       <div className="edu">
         <ul className="edu-list">
           {education.map((e) => (
