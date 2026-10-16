@@ -25,15 +25,18 @@ export const profile = {
   },
 };
 
-// The "at a glance" card in the hero: what a recruiter checks first.
-export const glance = [
-  { label: 'Role', value: 'Security engineer', note: 'SOC, detection, AI security' },
-  { label: 'Recent', value: 'Navitas Life Sciences', note: 'Cybersecurity Intern, 2026' },
-  { label: 'Before', value: 'Wipro', note: 'Project Engineer, 2022–2024' },
-  { label: 'Education', value: 'M.S. Cybersecurity, Northeastern', note: 'Dec 2026' },
-  { label: 'Certs', value: 'Azure Fundamentals · Security, Compliance & Identity · SAFe 6' },
-  { label: 'Tools', value: 'CrowdStrike · Wazuh · Splunk · Purview DLP · Entra ID · Python' },
-];
+// The access badge in the hero: what a recruiter checks first.
+// AZ-900 = Azure Fundamentals, SC-900 = Security, Compliance, and Identity Fundamentals.
+export const badge = {
+  role: 'Security engineer',
+  status: 'Open to full-time roles',
+  fields: [
+    { label: 'Recent', value: 'Navitas Life Sciences' },
+    { label: 'Before', value: 'Wipro' },
+    { label: 'Studying', value: 'M.S. Cybersecurity, Northeastern · Dec 2026', full: true },
+    { label: 'Certified', value: 'AZ-900 · SC-900 · SAFe 6', full: true },
+  ],
+};
 
 // "What I do": offense (red), defense (blue), and where they meet (purple).
 export const pillars = [

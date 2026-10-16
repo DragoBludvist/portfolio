@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
-import { glance, profile } from '../data/profile.js';
+import { badge, profile } from '../data/profile.js';
 import SafeLink from './SafeLink.jsx';
 
 const MOTTO_TONES = ['offense', 'ai', 'defense'];
 
-// Calm first impression: one name, one line, and the facts a recruiter checks
-// first in the "at a glance" card. The only motion is the name settling in,
-// the glance rows sliding in once, and a faint halftone that follows the cursor.
+// Calm first impression: one name, one line, and the access badge with the
+// facts a recruiter checks first. The only motion is the name settling in, the
+// badge sliding in once, and a faint halftone that follows the cursor.
 export default function Hero() {
   const heroRef = useRef(null);
+  const photoRef = useRef(null);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -21,6 +22,10 @@ export default function Hero() {
     hero.addEventListener('pointermove', onMove);
     return () => hero.removeEventListener('pointermove', onMove);
   }, []);
+
+  // Native <dialog>: traps focus, closes on Esc, and returns focus to the photo button.
+  const openPhoto = () => photoRef.current?.showModal();
+  const closePhoto = () => photoRef.current?.close();
 
   return (
     <section id="top" className="hero" ref={heroRef}>
@@ -50,27 +55,49 @@ export default function Hero() {
           </div>
         </div>
 
-        <aside className="glance" aria-label="At a glance">
-          <div className="glance-head">
-            <img src={profile.photo.src} alt="" width="56" height="56" decoding="async" />
-            <p>
-              <b>{profile.displayName}</b>
-              Security engineer · {profile.location}
-            </p>
+        <aside className="idcard" aria-label="Access badge">
+          <div className="idcard-top">
+            <span>Access badge</span>
+            <abbr className="idcard-tlp" title="Traffic Light Protocol: public, free to share">
+              TLP:CLEAR
+            </abbr>
           </div>
-          <dl>
-            {glance.map((row) => (
-              <div className="glance-row" key={row.label}>
-                <dt>{row.label}</dt>
-                <dd>
-                  {row.value}
-                  {row.note && <span> · {row.note}</span>}
-                </dd>
+          <div className="idcard-id">
+            <button type="button" className="idcard-photo" onClick={openPhoto} aria-label="View full photo">
+              <img src={profile.photo.src} alt="" width="96" height="116" decoding="async" />
+            </button>
+            <div>
+              <p className="idcard-name">{profile.name}</p>
+              <p className="idcard-role">
+                {badge.role} · {profile.location}
+              </p>
+              <span className="idcard-status">{badge.status}</span>
+            </div>
+          </div>
+          <dl className="idcard-fields">
+            {badge.fields.map((f) => (
+              <div key={f.label} className={f.full ? 'is-full' : ''}>
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
               </div>
             ))}
           </dl>
+          <div className="idcard-code" aria-hidden="true" />
         </aside>
       </div>
+
+      <dialog
+        ref={photoRef}
+        className="photo-viewer"
+        aria-label={profile.photo.alt}
+        // a click on the dimmed backdrop lands on the dialog itself, so it closes the viewer
+        onClick={(e) => e.target === e.currentTarget && closePhoto()}
+      >
+        <img src={profile.photo.src} alt={profile.photo.alt} />
+        <button type="button" className="photo-close" onClick={closePhoto} aria-label="Close photo">
+          ×
+        </button>
+      </dialog>
     </section>
   );
 }
