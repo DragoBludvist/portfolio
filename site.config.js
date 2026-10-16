@@ -5,7 +5,7 @@
 // 2. Put the code below, e.g. 'aakashpremnath'.
 // 3. Run `npm run sync:vercel` so the Vercel headers allow it too.
 // Leave it empty to turn counting off completely (nothing is loaded or sent).
-export const goatcounterCode = '';
+export const goatcounterCode = 'aakashpremnath';
 
 // Only lowercase letters, digits and hyphens are accepted, so the code can be
 // placed safely into a URL and the Content-Security-Policy.

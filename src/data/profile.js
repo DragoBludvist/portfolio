@@ -142,6 +142,5 @@ export const certifications = [
   { name: 'Microsoft Certified: Azure Fundamentals' },
   { name: 'Microsoft Certified: Security, Compliance, and Identity Fundamentals' },
   { name: 'Certified SAFe 6 Agilist' },
-  // As listed on the resume; confirm the exact exam name before relying on it.
-  { name: 'SC-500: Cloud and AI Security Engineer Associate (beta)', status: 'In progress' },
+  { name: 'SC-500: Microsoft Certified: Cloud and AI Security Engineer Associate', status: 'In progress' },
 ];

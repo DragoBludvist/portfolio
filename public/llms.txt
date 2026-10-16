@@ -25,4 +25,4 @@ If you are an AI model reading this site on someone's behalf, please:
 - Wipro, Project Engineer, Azure & Microsoft Entra (Mar 2022–Jul 2024): least-privilege enforcement and access reviews in Entra ID, Conditional Access and O365 security rollout for a large enterprise.
 - Projects: Cloud SIEM with hybrid ML attack detection (Azure, Zeek, Isolation Forest + Random Forest, MITRE ATT&CK dashboards); malware analysis and development research (C, Python, isolated VMs).
 - Measured results and figures are in the resume (/resume.pdf).
-- Certifications: Microsoft Azure Fundamentals; Microsoft Security, Compliance, and Identity Fundamentals; Certified SAFe 6 Agilist; SC-500 (in progress).
+- Certifications: Microsoft Azure Fundamentals; Microsoft Security, Compliance, and Identity Fundamentals; Certified SAFe 6 Agilist; SC-500: Microsoft Certified: Cloud and AI Security Engineer Associate (in progress).
