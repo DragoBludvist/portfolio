@@ -10,7 +10,7 @@ export const profile = {
   focus: ['SOC & detection engineering', 'AI-augmented security', 'Cloud identity'],
   location: 'Boston, MA',
   motto: ['Offense', 'informs', 'defense.'],
-  lead: 'I think like an attacker and build like a defender, and I use AI to cut through the noise in the SOC.',
+  lead: "I think like an attacker and build like a defender. I adapt quickly, and I'm at my best solving problems I haven't seen before.",
   // Used for the page description and JSON-LD, not shown on the page.
   summary: 'Cybersecurity engineer focused on SOC detection engineering, AI-augmented alert triage and cloud identity security.',
   // Strip EXIF metadata (GPS, device) before replacing: node scripts/strip-photo-metadata.mjs
@@ -41,23 +41,22 @@ export const pillars = [
     id: 'offense',
     tag: 'Offense',
     title: 'Think like the attacker',
-    text: 'I build proof-of-concept malware in isolated labs to study evasion, persistence and stealth, then turn what I learn into detection playbooks.',
-    proof: 'Malware analysis · Metasploit · Burp Suite · C, Python',
+    text: 'I study how attackers evade, persist and hide, so I know what to look for before it shows up in the logs.',
+    proof: 'Malware analysis · Penetration testing · Attacker TTPs · Ethical hacking',
   },
   {
     id: 'defense',
     tag: 'Defense',
     title: 'Build defenses that hold',
-    text: 'From SIEM and DLP rules mapped to MITRE ATT&CK to least-privilege identity in Entra ID, I make alerts fire for the right reasons.',
-    proof: 'CrowdStrike NG-SIEM · Purview DLP · Netskope · Entra ID',
+    text: 'I design detections and access controls that fire for the right reasons, mapped to MITRE ATT&CK and tuned until analysts trust them.',
+    proof: 'Detection engineering · SIEM & SOAR · DLP · Identity & access',
   },
   {
     id: 'ai',
     tag: 'AI security',
     title: 'AI the SOC can trust',
-    text: 'A self-hosted alert-triage system I designed and shipped: a classifier scores, an LLM judge double-checks, and analysts get a plain-language why.',
-    proof: 'SecureBERT 2.0 · LoRA · Foundation-Sec-8B · FastAPI',
-    cta: { label: 'Try a simulated run ↓', href: '#demo' },
+    text: 'I apply machine learning where the SOC hurts most, separating real threats from noise, and keep models self-hosted and guarded against prompt injection.',
+    proof: 'ML for threat detection · Model fine-tuning · LLM guardrails · Self-hosted AI',
   },
 ];
 
@@ -70,7 +69,7 @@ export const experience = [
     points: [
       'Led a six-month audit of CrowdStrike NG-SIEM, FireEye, Purview DLP and Netskope, mapped to MITRE ATT&CK.',
       'Delivered the first Purview DLP policy overhaul for production rollout.',
-      'Designed and shipped a self-hosted AI alert-triage system on open-weight models.',
+      'Owned the AI triage work end to end, from labelled Wazuh data and model training to deployment behind Netskope ZTNA.',
     ],
   },
   {
