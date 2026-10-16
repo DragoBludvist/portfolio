@@ -9,7 +9,6 @@ export const profile = {
   roleLine: 'Cybersecurity engineer: SOC detection, AI security and cloud identity.',
   focus: ['SOC & detection engineering', 'AI-augmented security', 'Cloud identity'],
   location: 'Boston, MA',
-  status: ['Open to full-time roles', 'Graduating Dec 2026', 'Boston, MA'],
   motto: ['Offense', 'informs', 'defense.'],
   lead: 'I think like an attacker and build like a defender, and I use AI to cut through the noise in the SOC.',
   // Used for the page description and JSON-LD, not shown on the page.

@@ -326,34 +326,9 @@ kbd {
   gap: 64px;
   align-items: start;
 }
-.eyebrow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  animation: pulse 2.6s ease-out infinite;
-}
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(56, 211, 159, 0.55);
-  }
-  70%,
-  100% {
-    box-shadow: 0 0 0 8px transparent;
-  }
-}
 /* the one bold detail: red and blue "plates" slightly out of register */
 .hero-name {
-  margin: 22px 0 18px;
+  margin: 0 0 18px;
   font-weight: 700;
   font-size: clamp(2.8rem, 2rem + 4vw, 5rem);
   line-height: 1;

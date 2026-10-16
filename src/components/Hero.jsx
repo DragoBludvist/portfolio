@@ -27,10 +27,6 @@ export default function Hero({ onHighlight }) {
       <div className="halftone" aria-hidden="true" />
       <div className="wrap hero-grid">
         <div>
-          <p className="eyebrow">
-            <span className="status-dot" aria-hidden="true" />
-            {profile.status.join(' · ')}
-          </p>
           <h1 className="hero-name">
             {profile.displayName}
             <span className="sr-only"> Subramanyam</span>
