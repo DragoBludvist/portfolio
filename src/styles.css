@@ -889,6 +889,21 @@ html:has(.photo-viewer[open]) {
   border-bottom: 1px solid var(--border);
   font-size: 0.95rem;
 }
+.cert-link {
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.cert-link span {
+  color: var(--purple);
+}
+@media (hover: hover) {
+  .cert-link:hover {
+    color: #fff;
+    text-decoration-color: var(--purple);
+  }
+}
 .badge {
   flex-shrink: 0;
   padding: 2px 8px;

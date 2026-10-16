@@ -1,4 +1,5 @@
 import { certifications, education } from '../data/profile.js';
+import SafeLink from './SafeLink.jsx';
 import Section from './Section.jsx';
 
 export default function Education() {
@@ -19,7 +20,13 @@ export default function Education() {
         <ul className="cert-list reveal">
           {certifications.map((c) => (
             <li key={c.name}>
-              <span>{c.name}</span>
+              {c.href ? (
+                <SafeLink className="cert-link" href={c.href} newTab aria-label={`${c.name} (opens the certificate PDF)`}>
+                  {c.name} <span aria-hidden="true">↗</span>
+                </SafeLink>
+              ) : (
+                <span>{c.name}</span>
+              )}
               {c.status && <span className="badge">{c.status}</span>}
             </li>
           ))}

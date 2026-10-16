@@ -140,8 +140,9 @@ export const education = [
 ];
 
 export const certifications = [
-  { name: 'Microsoft Certified: Azure Fundamentals' },
-  { name: 'Microsoft Certified: Security, Compliance, and Identity Fundamentals' },
+  // `href` links the name to the certificate PDF in public/certs/.
+  { name: 'Microsoft Certified: Azure Fundamentals', href: '/certs/az-900.pdf' },
+  { name: 'Microsoft Certified: Security, Compliance, and Identity Fundamentals', href: '/certs/sc-900.pdf' },
   { name: 'Certified SAFe 6 Agilist' },
   { name: 'SC-500: Microsoft Certified: Cloud and AI Security Engineer Associate', status: 'In progress' },
 ];
