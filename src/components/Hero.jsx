@@ -7,7 +7,7 @@ const MOTTO_TONES = ['offense', 'ai', 'defense'];
 // Calm first impression: one name, one line, and the facts a recruiter checks
 // first in the "at a glance" card. The only motion is the name settling in,
 // the glance rows sliding in once, and a faint halftone that follows the cursor.
-export default function Hero({ onHighlight }) {
+export default function Hero() {
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -34,18 +34,9 @@ export default function Hero({ onHighlight }) {
           <p className="hero-role reveal">{profile.roleLine}</p>
           <p className="motto reveal">
             {profile.motto.map((word, i) => (
-              <button
-                key={word}
-                type="button"
-                className={`motto-${MOTTO_TONES[i]}`}
-                onMouseEnter={() => onHighlight(MOTTO_TONES[i], false)}
-                onMouseLeave={() => onHighlight(null, false)}
-                onFocus={() => onHighlight(MOTTO_TONES[i], false)}
-                onBlur={() => onHighlight(null, false)}
-                onClick={() => onHighlight(MOTTO_TONES[i], true)}
-              >
+              <span key={word} className={`motto-${MOTTO_TONES[i]}`}>
                 {word}
-              </button>
+              </span>
             ))}
           </p>
           <p className="hero-lead reveal">{profile.lead}</p>

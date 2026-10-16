@@ -36,10 +36,8 @@ export default function App() {
   const reduced = usePrefersReducedMotion();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toast, setToast] = useState('');
-  const [lit, setLit] = useState(null);
   const [dragoOn, setDragoOn] = useState(readDrago);
   const toastTimer = useRef(0);
-  const litTimer = useRef(0);
 
   const notify = useCallback((message) => {
     setToast(message);
@@ -58,18 +56,6 @@ export default function App() {
 
   const goTo = useCallback((id) => document.getElementById(id)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }), [reduced]);
 
-  // Hovering a motto word lights its card; clicking also scrolls to it.
-  const highlight = useCallback(
-    (tone, scroll) => {
-      clearTimeout(litTimer.current);
-      setLit(tone);
-      if (scroll && tone) {
-        document.getElementById(`pillar-${tone}`)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
-        litTimer.current = setTimeout(() => setLit(null), 1600);
-      }
-    },
-    [reduced],
-  );
 
   const toggleDrago = useCallback(() => {
     setDragoOn((on) => {
@@ -116,13 +102,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [paletteOpen]);
 
-  useEffect(
-    () => () => {
-      clearTimeout(toastTimer.current);
-      clearTimeout(litTimer.current);
-    },
-    [],
-  );
+  useEffect(() => () => clearTimeout(toastTimer.current), []);
 
   return (
     <>
@@ -131,8 +111,8 @@ export default function App() {
       </a>
       <Nav onCopyEmail={copyEmail} />
       <main id="main">
-        <Hero onHighlight={highlight} />
-        <WhatIDo lit={lit} />
+        <Hero />
+        <WhatIDo />
         <Experience />
         <Projects />
         <TriageDemo />

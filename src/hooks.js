@@ -17,6 +17,9 @@ export const usePrefersReducedMotion = () => useMediaQuery('(prefers-reduced-mot
 
 // Fades sections in as they scroll into view. CSS skips the animation
 // entirely when the user prefers reduced motion.
+// The state lives in a data attribute, not a class: React rewrites the whole
+// class list whenever a component's className changes, which would wipe an
+// added class and hide the element again. React leaves unknown attributes alone.
 export function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -24,7 +27,7 @@ export function useReveal() {
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
+            e.target.setAttribute('data-revealed', '');
             io.unobserve(e.target);
           }
         }
