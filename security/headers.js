@@ -3,7 +3,7 @@
 // to serve the same headers from `npm run preview`, and to fail the build
 // if vercel.json has drifted from it.
 
-import { goatcounterOrigin } from '../site.config.js';
+import { goatcounterOrigin, siteOrigin } from '../site.config.js';
 
 // Visit counting sends a single image request to GoatCounter, so its origin is
 // added to img-src only when a site code is configured in site.config.js.
@@ -45,6 +45,8 @@ export const securityHeaders = {
   'Cross-Origin-Opener-Policy': 'same-origin',
   'Cross-Origin-Resource-Policy': 'same-origin',
   'X-Permitted-Cross-Domain-Policies': 'none',
+  // Overrides the host's default "*" (pentest finding L1, 2026-10-22).
+  'Access-Control-Allow-Origin': siteOrigin,
 };
 
 export const cacheRules = [

@@ -1,4 +1,10 @@
 // Site-wide settings that affect security headers as well as the page.
+
+// The production origin. Used for Access-Control-Allow-Origin so other websites
+// can't read the site's files with fetch(); the site itself loads everything
+// same-origin, so this never affects visitors.
+export const siteOrigin = 'https://aakashpremnathportfolio.vercel.app';
+
 //
 // GoatCounter: privacy-friendly, cookieless visit counting (free for personal sites).
 // 1. Create an account at https://www.goatcounter.com and pick a site code.
